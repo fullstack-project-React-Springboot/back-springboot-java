@@ -1,0 +1,16 @@
+version: "3.9"
+
+services:
+  database:
+    image: "mysql:latest"
+    container_name: database
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: yes
+      MYSQL_DATABASE: services
+    ports:
+      - "8081:3306"
+    # volumes:
+    #  - data:/var/lib/mysql
+
+# volumes:
+#  data:
