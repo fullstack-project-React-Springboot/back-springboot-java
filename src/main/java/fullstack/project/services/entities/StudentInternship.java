@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 public class StudentInternship {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private long id;
 
     @Column(name = "mission", nullable = false)
     private String mission;

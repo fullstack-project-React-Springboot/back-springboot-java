@@ -1,8 +1,8 @@
 package fullstack.project.services.services;
 
-import fullstack.project.services.entities.Tutor;
 import fullstack.project.services.entities.UserPrincipal;
 import fullstack.project.services.repositories.TutorRepository;
+import fullstack.project.services.strings.values.Values;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -14,15 +14,16 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     private final TutorRepository tutorRepository;
 
-    @Autowired
     public UserDetailsServiceImpl(TutorRepository tutorRepository) {
         this.tutorRepository = tutorRepository;
     }
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Tutor tutor = tutorRepository.findByEmail(email);
-        if(tutor == null)
-            throw new UsernameNotFoundException("User not found");
-        return UserPrincipal.create(tutor);
+        return UserPrincipal.create(
+                tutorRepository
+                        .findByEmail(email)
+                        .orElseThrow(() -> {
+                            throw new UsernameNotFoundException(email + " " + Values.NOT_FOUND_MESSAGE);
+                        }));
     }
 }

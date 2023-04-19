@@ -13,5 +13,5 @@ public class StudentDTO {
     private String lastname;
     private String email;
     private String promotion;
-    private List<StudentInternship> studentInternship;
+    private List<StudentInternship> studentInternships;
 }

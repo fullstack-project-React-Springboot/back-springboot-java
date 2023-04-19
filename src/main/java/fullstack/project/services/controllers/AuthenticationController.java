@@ -22,7 +22,6 @@ public class AuthenticationController {
     private final AuthenticationManager authenticationManager;
     private final JWTUtil jwtUtil;
     private final TutorService tutorService;
-
     private final PasswordEncoder passwordEncoder;
     @Autowired
     public AuthenticationController(AuthenticationManager authenticationManager, JWTUtil jwtUtil,
@@ -37,17 +36,16 @@ public class AuthenticationController {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         authenticationRequest.email(),
-                        authenticationRequest.password()));
+                        authenticationRequest.password()
+                )
+        );
         UserPrincipal user = (UserPrincipal) authentication.getPrincipal();
         String token = jwtUtil.generateToken(user.getUsername());
-        return new AuthenticationResponse(user.getUsername(), token, user.getTutor().getStudents());
+        Tutor tutor = user.getTutor();
+        return new AuthenticationResponse(user.getUsername(), token, tutor.getFirstname(), tutor.getLastname());
     }
     @PostMapping(Routes.REGISTER)
     public Tutor saveTutor(@RequestBody Tutor tutor) {
-        Tutor dbTutor = tutorService.findByEmail(tutor.getEmail());
-        if(dbTutor != null) {
-            return null;
-        }
         String encodedPassword = passwordEncoder.encode(tutor.getPassword());
         tutor.setPassword(encodedPassword);
         return tutorService.save(tutor);

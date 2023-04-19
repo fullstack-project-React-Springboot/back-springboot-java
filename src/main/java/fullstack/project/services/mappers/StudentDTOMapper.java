@@ -12,7 +12,7 @@ public class StudentDTOMapper {
           student.getLastname(),
           student.getEmail(),
           student.getPromotion(),
-          student.getStudentInternship());
+          student.getStudentInternships());
     }
 
     public static Student toStudent(StudentDTO studentDTO, Tutor tutor) {
@@ -22,7 +22,8 @@ public class StudentDTOMapper {
                 studentDTO.getLastname(),
                 studentDTO.getEmail(),
                 studentDTO.getPromotion(),
-                studentDTO.getStudentInternship(),
-                tutor);
+                studentDTO.getStudentInternships(),
+                tutor
+        );
     }
 }

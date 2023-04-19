@@ -9,37 +9,43 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Component;
 import fullstack.project.services.strings.values.Values;
 
-import java.util.Date;
+import java.time.*;
+import java.util.Optional;
 
 @Component
 public class JWTUtil {
     private final String secret = Values.SECRET;
     public String generateToken(String email) throws IllegalArgumentException {
-        Date currentDate = new Date();
+        OffsetDateTime now = OffsetDateTime.now();
         int validityDuration = 30;
-        Date expirationDate = new Date(currentDate.getTime() + validityDuration * 60 * 1000);
         return JWT.create()
                 .withSubject(Values.USER_DETAILS)
                 .withClaim(Values.EMAIL, email)
-                .withIssuedAt(currentDate)
-                .withExpiresAt(expirationDate)
+                .withIssuedAt(now.toInstant())
+                .withExpiresAt(now.plusMinutes(validityDuration).toInstant())
                 .withIssuer(Values.APPLICATION_NAME)
                 .sign(Algorithm.HMAC256(secret));
     }
 
-    public String validateTokenAndRetrieveSubject(String token) throws JWTVerificationException {
+    public String retrieveEmail(String token) throws JWTVerificationException {
+        DecodedJWT jwtDecoded = jwtDecoder(token);
+        return jwtDecoded.getClaim(Values.EMAIL).asString();
+    }
+
+    private DecodedJWT jwtDecoder(String token) throws JWTVerificationException {
         JWTVerifier verifier = JWT.require(Algorithm.HMAC256(secret))
                 .withSubject(Values.USER_DETAILS)
                 .withIssuer(Values.APPLICATION_NAME)
                 .build();
-        DecodedJWT jwt = verifier.verify(token);
-        return jwt.getClaim(Values.EMAIL).asString();
+        return verifier.verify(token);
     }
 
-    public String getToken(HttpServletRequest request) {
+    public Optional<String> getToken(HttpServletRequest request) {
         String authHeader = request.getHeader(Values.AUTHORIZATION);
-        return authHeader != null && authHeader.startsWith(Values.BEARER) ?
-            authHeader.substring(7) : null;
+        return Optional.ofNullable(
+                authHeader != null && authHeader.startsWith(Values.BEARER) ?
+                        authHeader.substring(7) : null
+        );
     }
 
 }

@@ -7,9 +7,14 @@ public class Values {
     public static final String BEARER = "Bearer ";
     public static final String AUTHORIZATION = "Authorization";
     public static final String UNAUTHORIZED = "Unauthorized";
-    public static final String INVALID_JWT_TOKEN = "Invalid JWT Token";
-    public static final String APPLICATION_NAME = "s9.apr.giftservices";
+    public static final String APPLICATION_NAME = "services";
     public static final String USER_DETAILS = "User Details";
     public static final String EMAIL = "email";
     public static final  String SECRET=":DX&}OT_fMEgF]5PjPjbae.Ne}8K";
+    public static final String EXPIRED_TOKEN="EXPIRED TOKEN";
+    public static final String NOT_FOUND_MESSAGE = "NOT FOUND";
+    public static final String DO_NOT_EXIST = "DO NOT EXIST";
+    public static final String ALREADY_REGISTER = "ALREADY REGISTER";
+    public static final String AUTHENTICATION_FAILED = "Authentication failed";
+    public static final String INTERNAL_SERVER_ERROR_OCCURS = "Internal server error occurs";
 }

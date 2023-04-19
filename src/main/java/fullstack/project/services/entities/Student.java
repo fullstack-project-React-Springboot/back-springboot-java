@@ -1,5 +1,6 @@
 package fullstack.project.services.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 
@@ -21,17 +22,20 @@ public class Student extends Intern {
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "student_internship_id")
-    private List<StudentInternship> studentInternship;
+    private List<StudentInternship> studentInternships;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "tutor_id")
+    @JsonIgnore
     private Tutor tutor;
 
-    public Student(long id, String firstname, String lastname, String email,
-                   String promotion, List<StudentInternship> studentInternship, Tutor tutor) {
+    public Student(long id, String firstname, String lastname, String email, String promotion,
+                   List<StudentInternship> studentInternships,
+                   Tutor tutor
+    ) {
         super(id, firstname, lastname, email);
         this.promotion = promotion;
-        this.studentInternship = studentInternship;
+        this.studentInternships = studentInternships;
         this.tutor = tutor;
     }
 }
