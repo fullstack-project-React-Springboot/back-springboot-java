@@ -22,8 +22,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         return UserPrincipal.create(
                 tutorRepository
                         .findByEmail(email)
-                        .orElseThrow(() -> {
-                            throw new UsernameNotFoundException(email + " " + Values.NOT_FOUND_MESSAGE);
-                        }));
+                        .orElseThrow(() -> new UsernameNotFoundException(email + " " + Values.NOT_FOUND_MESSAGE)));
     }
 }

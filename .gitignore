@@ -1,3 +1,7 @@
 .idea
 target
 **/.DS_Store
+services.iml
+Dockerfile
+docker-compose.yml
+src/main/resources/old.application.properties

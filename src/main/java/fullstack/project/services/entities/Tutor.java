@@ -15,21 +15,23 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(name = "tutor")
-public class Tutor extends Intern{
+public class Tutor extends Intern {
 
     @Column(name = "password")
-    @JsonIgnore
     private String password;
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "tutor_id")
     @JsonIgnore
     private List<Student> students = new ArrayList<>();
+
     public Tutor(long id, String firstname, String lastname, String email, String password) {
         super(id, firstname, lastname, email);
         this.password = password;
     }
-    public Tutor(long id, String firstname, String lastname, String email) {
+    public Tutor(long id, String email, String firstname, String lastname, String password, List<Student> students) {
         super(id, firstname, lastname, email);
+        this.password = password;
+        this.students = students;
     }
 }

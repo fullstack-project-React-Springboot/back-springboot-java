@@ -35,16 +35,14 @@ public class DefaultDataLoader implements CommandLineRunner {
         Tutor defaultTutor = new Tutor(1, "default", "default", "default.default@gmail.com", "123456");
         defaultTutor.setPassword(passwordEncoder.encode(defaultTutor.getPassword()));
         tutorRepository.findByEmail(defaultTutor.getEmail())
-                .ifPresentOrElse(dbTutor -> {
-                    if(studentRepository.findAllByTutorEmail(dbTutor.getEmail()).isEmpty())
-                        studentRepository.saveAll(generateStudents(2, dbTutor));
-                    }, () -> {
+                .ifPresentOrElse(dbTutor -> log.info("Default tutor already settled up")
+                        , () -> {
                     tutorRepository.save(defaultTutor);
-                    studentRepository.saveAll(generateStudents(30, defaultTutor));
+                    studentRepository.saveAll(generateStudents(defaultTutor));
+                    log.info("Default tutor set up");
                 });
-        log.info("Default tutor set up");
     }
-    private List<StudentInternship> generateStudentInternships(int number) {
+    private List<StudentInternship> generateStudentInternships() {
         LocalDate startingDate = faker.date()
                 .between(Date.valueOf(LocalDate.of(2007,1, 1)), Date.valueOf(LocalDate.now()))
                 .toInstant()
@@ -52,7 +50,7 @@ public class DefaultDataLoader implements CommandLineRunner {
                 .toLocalDate();
         log.info("Generating a list of internships...");
         return IntStream
-                .rangeClosed(1, number)
+                .rangeClosed(1, 2)
                 .mapToObj(i ->
                         new StudentInternship(
                                 faker.number().randomNumber(),
@@ -66,11 +64,11 @@ public class DefaultDataLoader implements CommandLineRunner {
                 )
                 .toList();
     }
-    private List<Student> generateStudents(int number, Tutor tutor) {
+    private List<Student> generateStudents(Tutor tutor) {
         int startYear = faker.number().numberBetween(2000, 2022);
         LocalDate startingDate = LocalDate.of(startYear, 9, 1);
         log.info("Generating a list of students...");
-        return IntStream.rangeClosed(1, number)
+        return IntStream.rangeClosed(1, 30)
                 .mapToObj(i -> new Student(
                         i,
                         faker.name().firstName(),
@@ -79,7 +77,7 @@ public class DefaultDataLoader implements CommandLineRunner {
                         faker.date()
                                 .between(Date.valueOf(startingDate), Date.valueOf(LocalDate.now().plusYears(5)))
                                 .toString(),
-                        generateStudentInternships(2),
+                        generateStudentInternships(),
                         tutor
                         )
                 )

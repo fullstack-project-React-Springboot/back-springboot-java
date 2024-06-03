@@ -1,4 +1,5 @@
 package fullstack.project.services.security;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -11,19 +12,19 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import jakarta.servlet.http.*;
 import fullstack.project.services.strings.routes.Routes;
-import fullstack.project.services.strings.values.Values;
 
 @Configuration
 public class SecurityConfiguration {
 
     private final JWTFilter filter;
     private final CustomAuthenticationEntryPoint entryPoint;
+
     public SecurityConfiguration(JWTFilter filter, CustomAuthenticationEntryPoint entryPoint) {
         this.filter = filter;
         this.entryPoint = entryPoint;
     }
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf().disable()
@@ -34,10 +35,7 @@ public class SecurityConfiguration {
                 .and()
                 .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests()
-                .requestMatchers(
-                        Routes.LOGIN,
-                        Routes.REGISTER
-                )
+                .requestMatchers(Routes.WHITE_LIST_URLS)
                 .permitAll()
                 .anyRequest().authenticated()
                 .and()
@@ -46,6 +44,7 @@ public class SecurityConfiguration {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authenticationProvider(authenticationProvider());
+        http.headers().frameOptions().disable();
         return http.build();
     }
 
@@ -53,6 +52,7 @@ public class SecurityConfiguration {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();

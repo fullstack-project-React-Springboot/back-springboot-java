@@ -1,11 +1,15 @@
 package fullstack.project.services.security;
 
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import fullstack.project.services.entities.ErrorResponse;
 import fullstack.project.services.entities.UserPrincipal;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -33,15 +37,21 @@ public class JWTFilter extends OncePerRequestFilter {
                 UserPrincipal userDetails = (UserPrincipal) userDetailsService.loadUserByUsername(email);
                 var authToken = new UsernamePasswordAuthenticationToken(
                         userDetails.getUsername(),
-                        userDetails.getPassword(),
+                        null,
                         userDetails.getAuthorities()
                 );
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             });
             filterChain.doFilter(request, response);
         }catch (JWTVerificationException e) {
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.getWriter().write(Values.EXPIRED_TOKEN);
+            logger.error(e.getMessage());
+            ObjectMapper objectMapper = new ObjectMapper();
+            response.setStatus(HttpStatus.UNAUTHORIZED.value());
+            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+            response.getWriter()
+                    .write(objectMapper
+                            .writeValueAsString(new ErrorResponse(HttpStatus.UNAUTHORIZED.value(), Values.EXPIRED_TOKEN))
+                    );
             response.getWriter().flush();
             response.getWriter().close();
         }

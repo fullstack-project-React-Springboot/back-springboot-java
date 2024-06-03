@@ -14,7 +14,6 @@ import java.util.Optional;
 
 @Component
 public class JWTUtil {
-    private final String secret = Values.SECRET;
     public String generateToken(String email) throws IllegalArgumentException {
         OffsetDateTime now = OffsetDateTime.now();
         int validityDuration = 30;
@@ -24,7 +23,7 @@ public class JWTUtil {
                 .withIssuedAt(now.toInstant())
                 .withExpiresAt(now.plusMinutes(validityDuration).toInstant())
                 .withIssuer(Values.APPLICATION_NAME)
-                .sign(Algorithm.HMAC256(secret));
+                .sign(Algorithm.HMAC256(Values.SECRET));
     }
 
     public String retrieveEmail(String token) throws JWTVerificationException {
@@ -33,7 +32,7 @@ public class JWTUtil {
     }
 
     private DecodedJWT jwtDecoder(String token) throws JWTVerificationException {
-        JWTVerifier verifier = JWT.require(Algorithm.HMAC256(secret))
+        JWTVerifier verifier = JWT.require(Algorithm.HMAC256(Values.SECRET))
                 .withSubject(Values.USER_DETAILS)
                 .withIssuer(Values.APPLICATION_NAME)
                 .build();

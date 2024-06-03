@@ -12,12 +12,14 @@ public class TutorDTOMapper {
                 tutor.getLastname()
         );
     }
-    public static Tutor toTutor(TutorDTO tutorDTO) {
+    public static Tutor toTutor(TutorDTO tutorDTO, Tutor tutor) {
         return new Tutor(
                 tutorDTO.getId(),
+                tutorDTO.getEmail(),
                 tutorDTO.getFirstname(),
                 tutorDTO.getLastname(),
-                tutorDTO.getEmail()
+                tutor.getPassword(),
+                tutor.getStudents()
         );
     }
 }

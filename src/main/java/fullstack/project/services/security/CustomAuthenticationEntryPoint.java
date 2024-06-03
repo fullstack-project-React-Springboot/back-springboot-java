@@ -1,5 +1,7 @@
 package fullstack.project.services.security;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import fullstack.project.services.entities.ErrorResponse;
 import fullstack.project.services.strings.values.Values;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -15,9 +17,13 @@ import java.io.IOException;
 public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint {
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setStatus(HttpStatus.UNAUTHORIZED.value());
-        response.getWriter().write(Values.AUTHENTICATION_FAILED + " " + authException.getMessage());
+        response.getWriter()
+                .write(objectMapper
+                        .writeValueAsString(new ErrorResponse(HttpStatus.UNAUTHORIZED.value(),Values.AUTHENTICATION_FAILED + ", " + authException.getMessage()))
+                );
         response.getWriter().flush();
         response.getWriter().close();
     }
