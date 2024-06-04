@@ -2,6 +2,7 @@ package fullstack.project.services.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 
 import lombok.Data;
@@ -17,6 +18,7 @@ import java.util.List;
 @Table(name = "student")
 public class Student extends Intern {
 
+    @NotEmpty(message = "promotion cannot be empty")
     @Column(name = "promotion", nullable = false)
     private String promotion;
 

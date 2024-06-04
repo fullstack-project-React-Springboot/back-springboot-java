@@ -5,6 +5,7 @@ import fullstack.project.services.entities.AuthenticationResponse;
 import fullstack.project.services.entities.UserPrincipal;
 import fullstack.project.services.security.JWTUtil;
 import fullstack.project.services.strings.routes.Routes;
+import jakarta.validation.Valid;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -23,7 +24,7 @@ public class AuthenticationController {
         this.jwtUtil = jwtUtil;
     }
     @PostMapping(Routes.LOGIN)
-    public AuthenticationResponse login(@RequestBody AuthenticationRequest authenticationRequest){
+    public AuthenticationResponse login(@Valid @RequestBody AuthenticationRequest authenticationRequest){
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         authenticationRequest.email(),

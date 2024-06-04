@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class StudentServiceImpl implements StudentService{
+public class StudentServiceImpl implements StudentService {
     private final StudentRepository studentRepository;
     public StudentServiceImpl(StudentRepository studentRepository) {
         this.studentRepository = studentRepository;
@@ -27,7 +27,7 @@ public class StudentServiceImpl implements StudentService{
     @Override
     public Student findById(long studentId) throws EntityNotFoundException {
         return studentRepository.findById(studentId)
-                .orElseThrow(() -> {throw new EntityNotFoundException("Student " + studentId + " " +Values.NOT_FOUND_MESSAGE);});
+                .orElseThrow(() -> new EntityNotFoundException("Student " + studentId + " " + Values.NOT_FOUND_MESSAGE));
     }
 
     @Override

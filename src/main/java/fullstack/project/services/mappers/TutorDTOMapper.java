@@ -14,10 +14,10 @@ public class TutorDTOMapper {
     }
     public static Tutor toTutor(TutorDTO tutorDTO, Tutor tutor) {
         return new Tutor(
-                tutorDTO.getId(),
-                tutorDTO.getEmail(),
-                tutorDTO.getFirstname(),
-                tutorDTO.getLastname(),
+                tutorDTO.id(),
+                tutorDTO.email(),
+                tutorDTO.firstname(),
+                tutorDTO.lastname(),
                 tutor.getPassword(),
                 tutor.getStudents()
         );

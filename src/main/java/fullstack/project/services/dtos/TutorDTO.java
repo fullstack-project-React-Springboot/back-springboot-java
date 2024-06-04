@@ -1,13 +1,15 @@
 package fullstack.project.services.dtos;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import jakarta.validation.constraints.NotBlank;
 
-@Data
-@AllArgsConstructor
-public class TutorDTO {
-    private long id;
-    private String email;
-    private String firstname;
-    private String lastname;
-}
+
+
+public record TutorDTO (
+    long id,
+    @NotBlank(message = "email should not be blank")
+    String email,
+    @NotBlank(message = "firstname should not be blank")
+    String firstname,
+    @NotBlank(message = "lastname should not be blank")
+    String lastname
+){}

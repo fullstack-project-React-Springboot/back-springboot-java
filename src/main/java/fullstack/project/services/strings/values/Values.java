@@ -9,7 +9,6 @@ public class Values {
     public static final String APPLICATION_NAME = "services";
     public static final String USER_DETAILS = "User Details";
     public static final String EMAIL = "email";
-    public static final  String SECRET=":DX&}OT_fMEgF]5PjPjbae.Ne}8K";
     public static final String EXPIRED_TOKEN="EXPIRED TOKEN";
     public static final String NOT_FOUND_MESSAGE = "NOT FOUND";
     public static final String DO_NOT_EXIST = "DO NOT EXIST";

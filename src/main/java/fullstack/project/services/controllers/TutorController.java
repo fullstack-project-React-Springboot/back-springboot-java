@@ -6,6 +6,7 @@ import fullstack.project.services.mappers.TutorDTOMapper;
 import fullstack.project.services.services.TutorService;
 
 import fullstack.project.services.strings.routes.Routes;
+import jakarta.validation.Valid;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,8 +25,8 @@ public class TutorController {
     }
 
     @PutMapping
-    public TutorDTO updateTutor(@RequestBody TutorDTO tutorDTO) {
-        Tutor tutor = tutorService.findByEmail(tutorDTO.getEmail());
+    public TutorDTO updateTutor(@Valid @RequestBody TutorDTO tutorDTO) {
+        Tutor tutor = tutorService.findByEmail(tutorDTO.email());
         return TutorDTOMapper
                 .toDTO(tutorService.update(TutorDTOMapper.toTutor(tutorDTO, tutor)));
     }
@@ -35,8 +36,8 @@ public class TutorController {
         return TutorDTOMapper.toDTO(tutorService.findByEmail(getAuthenticatedTutorEmail()));
     }
 
-    @PostMapping(Routes.REGISTER)
-    public TutorDTO registerTutor(@RequestBody Tutor tutor) {
+    @PostMapping
+    public TutorDTO registerTutor(@Valid @RequestBody Tutor tutor) {
         String encodedPassword = passwordEncoder.encode(tutor.getPassword());
         tutor.setPassword(encodedPassword);
         return TutorDTOMapper.toDTO(tutorService.save(tutor));

@@ -8,12 +8,15 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Component;
 import fullstack.project.services.strings.values.Values;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.time.*;
 import java.util.Optional;
 
 @Component
 public class JWTUtil {
+    @Value("${token.secret}")
+    private String secret;
     public String generateToken(String email) throws IllegalArgumentException {
         OffsetDateTime now = OffsetDateTime.now();
         int validityDuration = 30;
@@ -23,7 +26,7 @@ public class JWTUtil {
                 .withIssuedAt(now.toInstant())
                 .withExpiresAt(now.plusMinutes(validityDuration).toInstant())
                 .withIssuer(Values.APPLICATION_NAME)
-                .sign(Algorithm.HMAC256(Values.SECRET));
+                .sign(Algorithm.HMAC256(secret));
     }
 
     public String retrieveEmail(String token) throws JWTVerificationException {
@@ -32,7 +35,7 @@ public class JWTUtil {
     }
 
     private DecodedJWT jwtDecoder(String token) throws JWTVerificationException {
-        JWTVerifier verifier = JWT.require(Algorithm.HMAC256(Values.SECRET))
+        JWTVerifier verifier = JWT.require(Algorithm.HMAC256(secret))
                 .withSubject(Values.USER_DETAILS)
                 .withIssuer(Values.APPLICATION_NAME)
                 .build();

@@ -1,17 +1,20 @@
 package fullstack.project.services.dtos;
 
 import fullstack.project.services.entities.StudentInternship;
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import jakarta.validation.constraints.NotBlank;
 
 import java.util.List;
-@Data
-@AllArgsConstructor
-public class StudentDTO {
-    private long id;
-    private String firstname;
-    private String lastname;
-    private String email;
-    private String promotion;
-    private List<StudentInternship> studentInternships;
-}
+
+
+public record StudentDTO (
+        long id,
+        @NotBlank(message = "firstname should not be blank")
+        String firstname,
+        @NotBlank(message = "lastname should not be blank")
+        String lastname,
+        @NotBlank(message = "email should not be blank")
+        String email,
+        @NotBlank(message = "promotion should not be blank")
+        String promotion,
+        List<StudentInternship> studentInternships
+){}

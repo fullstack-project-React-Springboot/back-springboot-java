@@ -7,6 +7,7 @@ import fullstack.project.services.mappers.StudentDTOMapper;
 import fullstack.project.services.services.StudentService;
 import fullstack.project.services.services.TutorService;
 import fullstack.project.services.strings.routes.Routes;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -38,17 +39,16 @@ public class StudentController {
     }
 
     @PostMapping
-    public StudentDTO saveStudent(@RequestBody StudentDTO studentDTO) {
+    public StudentDTO saveStudent(@Valid @RequestBody StudentDTO studentDTO) {
         Tutor tutor = tutorService.findByEmail(getAuthenticatedTutorEmail());
         Student s = studentService.save(StudentDTOMapper.toStudent(studentDTO, tutor));
         return StudentDTOMapper.toDTO(s);
     }
 
     @PutMapping("/{studentId}")
-    public StudentDTO updateStudent(@PathVariable long studentId, @RequestBody StudentDTO studentDTO) {
+    public StudentDTO updateStudent(@PathVariable long studentId, @Valid @RequestBody StudentDTO studentDTO) {
         Tutor tutor = tutorService.findByEmail(getAuthenticatedTutorEmail());
-        studentDTO.setId(studentId);
-        Student s = studentService.update(StudentDTOMapper.toStudent(studentDTO, tutor));
+        Student s = studentService.update(StudentDTOMapper.toStudent(studentDTO, tutor, studentId));
         return StudentDTOMapper.toDTO(s);
     }
 

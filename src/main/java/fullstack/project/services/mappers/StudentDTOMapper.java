@@ -17,12 +17,24 @@ public class StudentDTOMapper {
 
     public static Student toStudent(StudentDTO studentDTO, Tutor tutor) {
         return new Student(
-                studentDTO.getId(),
-                studentDTO.getFirstname(),
-                studentDTO.getLastname(),
-                studentDTO.getEmail(),
-                studentDTO.getPromotion(),
-                studentDTO.getStudentInternships(),
+                studentDTO.id(),
+                studentDTO.firstname(),
+                studentDTO.lastname(),
+                studentDTO.email(),
+                studentDTO.promotion(),
+                studentDTO.studentInternships(),
+                tutor
+        );
+    }
+
+    public static Student toStudent(StudentDTO studentDTO, Tutor tutor, long studentId) {
+        return new Student(
+                studentId,
+                studentDTO.firstname(),
+                studentDTO.lastname(),
+                studentDTO.email(),
+                studentDTO.promotion(),
+                studentDTO.studentInternships(),
                 tutor
         );
     }
